@@ -390,6 +390,10 @@ class SetInstanceDetailsAction(workflows.Action):
                         label = '%s (%s)' % (lease['name'], reservation['id'])
                         reservation_ids.append((reservation['id'], label))
 
+        if not reservation_ids:
+            reservation_ids.insert(0, ("", _("No reservation found")))
+        else:
+            reservation_ids.append(("", _("Launch without reservation")))
         return reservation_ids
 
     def populate_availability_zone_choices(self, request, context):
@@ -524,7 +528,7 @@ class SetInstanceDetailsAction(workflows.Action):
 class SetInstanceDetails(workflows.Step):
     action_class = SetInstanceDetailsAction
     depends_on = ("project_id", "user_id")
-    contributes = ("source_type", "source_id", "reservation_id"
+    contributes = ("source_type", "source_id", "reservation_id",
                    "availability_zone", "name", "count", "flavor",
                    "device_name",  # Can be None for an image.
                    "delete_on_terminate")
@@ -953,7 +957,6 @@ class LaunchInstance(workflows.Workflow):
         reservation_id = context.get('reservation_id', None)
         if reservation_id is not None:
             scheduler_hints = {"reservation": reservation_id}
-
         try:
             api.nova.server_create(request,
                                    context['name'],
