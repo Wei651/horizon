@@ -21,6 +21,7 @@ import logging
 import operator
 
 from oslo_utils import units
+from blazardashboard.api import blazar
 
 from django.template.defaultfilters import filesizeformat  # noqa
 from django.utils.text import normalize_newlines  # noqa
@@ -81,9 +82,9 @@ class SetInstanceDetailsAction(workflows.Action):
     availability_zone = forms.ChoiceField(label=_("Availability Zone"),
                                           required=False)
 
-    reservation_id = forms.CharField(label=_("Reservation ID"),
-                                     max_length=255,
-                                     required=False)
+    reservation_id = forms.ChoiceField(label=_("Reservation"),
+                                       help_text=_("Choose a reservation to launch this instance against. Only active reservations are displayed as options."),
+                                       required=False)
 
     name = forms.CharField(label=_("Instance Name"),
                            max_length=255)
@@ -374,7 +375,22 @@ class SetInstanceDetailsAction(workflows.Action):
         return cleaned_data
 
     def populate_flavor_choices(self, request, context):
-        return instance_utils.flavor_field_data(request, False)
+        flavors = instance_utils.flavor_list(request)
+        if flavors:
+            return instance_utils.sort_flavor_list(request, flavors)
+        return []
+
+    def populate_reservation_id_choices(self, request, context):
+        leases = blazar.lease_list(request)
+        reservation_ids = []
+        if leases:
+            for lease in leases:
+                for reservation in lease.reservations:
+                    if reservation['status'] == 'active':
+                        label = '%s (%s)' % (lease['name'], reservation['id'])
+                        reservation_ids.append((reservation['id'], label))
+
+        return reservation_ids
 
     def populate_availability_zone_choices(self, request, context):
         try:
