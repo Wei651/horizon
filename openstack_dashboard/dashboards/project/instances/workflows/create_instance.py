@@ -160,22 +160,22 @@ class SetInstanceDetailsAction(workflows.Action):
             ("image_id", _("Boot from image")),
             ("instance_snapshot_id", _("Boot from snapshot")),
         ]
-        if base.is_service_enabled(request, 'volume'):
-            source_type_choices.append(("volume_id", _("Boot from volume")))
-
-            try:
-                if api.nova.extension_supported("BlockDeviceMappingV2Boot",
-                                                request):
-                    source_type_choices.append(
-                        ("volume_image_id",
-                         _("Boot from image (creates a new volume)")))
-            except Exception:
-                exceptions.handle(request, _('Unable to retrieve extensions '
-                                             'information.'))
-
-            source_type_choices.append(
-                ("volume_snapshot_id",
-                 _("Boot from volume snapshot (creates a new volume)")))
+        # if base.is_service_enabled(request, 'volume'):
+        #     source_type_choices.append(("volume_id", _("Boot from volume")))
+        #
+        #     try:
+        #         if api.nova.extension_supported("BlockDeviceMappingV2Boot",
+        #                                         request):
+        #             source_type_choices.append(
+        #                 ("volume_image_id",
+        #                  _("Boot from image (creates a new volume)")))
+        #     except Exception:
+        #         exceptions.handle(request, _('Unable to retrieve extensions '
+        #                                      'information.'))
+        #
+        #     source_type_choices.append(
+        #         ("volume_snapshot_id",
+        #          _("Boot from volume snapshot (creates a new volume)")))
         self.fields['source_type'].choices = source_type_choices
 
     @memoized.memoized_method
@@ -867,7 +867,8 @@ class LaunchInstance(workflows.Workflow):
                      SetAccessControls,
                      SetNetwork,
                      PostCreationStep,
-                     SetAdvanced)
+                    #  SetAdvanced
+                     )
 
     def format_status_message(self, message):
         name = self.context.get('name', 'unknown instance')
