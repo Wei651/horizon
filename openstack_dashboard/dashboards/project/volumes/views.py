@@ -12,15 +12,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from django.utils.translation import ugettext_lazy as _
 
-from horizon import tabs
-
-from openstack_dashboard.dashboards.project.volumes \
-    import tabs as project_tabs
+from django.views.generic import TemplateView
 
 
-class IndexView(tabs.TabbedTableView):
-    tab_group_class = project_tabs.VolumeAndSnapshotTabs
-    template_name = 'project/volumes/index.html'
-    page_title = _("Volumes")
+class IndexView(TemplateView):
+    template_name = 'project/volumes/index_override.html'
