@@ -1171,7 +1171,8 @@ class InstancesTable(tables.DataTable):
         table_actions = launch_actions + (TerminateInstance,
                                           InstancesFilterAction)
         row_actions = (StartInstance, ConfirmResize, RevertResize,
-                       CreateSnapshot, SimpleAssociateIP, AssociateIP,
+                       # CreateSnapshot, SimpleAssociateIP, AssociateIP,
+                       SimpleAssociateIP, AssociateIP,
                        SimpleDisassociateIP, AttachInterface,
                        DetachInterface, EditInstance,
                        DecryptInstancePassword, EditInstanceSecurityGroups,
