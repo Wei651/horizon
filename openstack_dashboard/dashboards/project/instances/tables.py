@@ -1162,7 +1162,7 @@ class InstancesTable(tables.DataTable):
         verbose_name = _("Instances")
         status_columns = ["status", "task"]
         row_class = UpdateRow
-        table_actions_menu = (StartInstance, StopInstance, SoftRebootInstance)
+        table_actions_menu = (StartInstance, StopInstance, RebootInstance)
         launch_actions = ()
         if getattr(settings, 'LAUNCH_INSTANCE_LEGACY_ENABLED', True):
             launch_actions = (LaunchLink,) + launch_actions
@@ -1170,14 +1170,18 @@ class InstancesTable(tables.DataTable):
             launch_actions = (LaunchLinkNG,) + launch_actions
         table_actions = launch_actions + (TerminateInstance,
                                           InstancesFilterAction)
+        # row_actions = (StartInstance, ConfirmResize, RevertResize,
+        #                CreateSnapshot, SimpleAssociateIP, AssociateIP,
+        #                SimpleDisassociateIP, AttachInterface,
+        #                DetachInterface, EditInstance,
+        #                DecryptInstancePassword, EditInstanceSecurityGroups,
+        #                ConsoleLink, LogLink, TogglePause, ToggleSuspend,
+        #                ToggleShelve, ResizeLink, LockInstance, UnlockInstance,
+        #                SoftRebootInstance, RebootInstance,
+        #                StopInstance, RebuildInstance, TerminateInstance)
         row_actions = (StartInstance, ConfirmResize, RevertResize,
-                       # CreateSnapshot, SimpleAssociateIP, AssociateIP,
                        SimpleAssociateIP, AssociateIP,
-                       SimpleDisassociateIP, AttachInterface,
-                       DetachInterface, EditInstance,
+                       SimpleDisassociateIP, EditInstance,
                        DecryptInstancePassword, EditInstanceSecurityGroups,
-                       # ConsoleLink, LogLink, TogglePause, ToggleSuspend,
-                       # ToggleShelve, ResizeLink, LockInstance, UnlockInstance,
-                       # SoftRebootInstance, RebootInstance,
-                       ResizeLink, RebootInstance,
-                       StopInstance, RebuildInstance, TerminateInstance)
+                       RebootInstance, StopInstance, RebuildInstance,
+                       TerminateInstance)
