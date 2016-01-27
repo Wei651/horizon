@@ -955,7 +955,7 @@ class LaunchInstance(workflows.Workflow):
 
         scheduler_hints = None
         reservation_id = context.get('reservation_id', None)
-        if reservation_id is not None:
+        if reservation_id:
             scheduler_hints = {"reservation": reservation_id}
         try:
             api.nova.server_create(request,
