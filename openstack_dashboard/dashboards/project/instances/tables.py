@@ -1146,8 +1146,8 @@ class InstancesTable(tables.DataTable):
                            status=True,
                            status_choices=STATUS_CHOICES,
                            display_choices=STATUS_DISPLAY_CHOICES)
-    az = tables.Column("availability_zone",
-                       verbose_name=_("Availability Zone"))
+    #az = tables.Column("availability_zone",
+     #                  verbose_name=_("Availability Zone"))
     task = tables.Column("OS-EXT-STS:task_state",
                          verbose_name=_("Task"),
                          empty_value=TASK_DISPLAY_NONE,

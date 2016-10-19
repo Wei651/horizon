@@ -79,8 +79,8 @@ class SelectProjectUser(workflows.Step):
 
 
 class SetInstanceDetailsAction(workflows.Action):
-    availability_zone = forms.ChoiceField(label=_("Availability Zone"),
-                                          required=False)
+    #availability_zone = forms.ChoiceField(label=_("Availability Zone"),
+     #                                     required=False)
 
     reservation_id = forms.ChoiceField(label=_("Reservation"),
                                        help_text=_("Choose a reservation to launch this instance against. Only active reservations are displayed as options."),
