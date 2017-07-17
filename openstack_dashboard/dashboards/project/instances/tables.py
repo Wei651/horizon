@@ -1303,9 +1303,7 @@ class InstancesTable(tables.DataTable):
         table_actions = launch_actions + (DeleteInstance,
                                           InstancesFilterAction)
         row_actions = (StartInstance, ConfirmResize, RevertResize,
-                       CreateSnapshot, AssociateIP, DisassociateIP,
                        AttachInterface, DetachInterface, EditInstance,
-                       AttachVolume, DetachVolume,
                        UpdateMetadata, DecryptInstancePassword,
                        EditInstanceSecurityGroups,
                        EditPortSecurityGroups,
