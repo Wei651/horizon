@@ -40,6 +40,8 @@
     'horizon.app.core.images.actions.update-metadata.service',
     'horizon.app.core.images.resourceType',
     'horizon.app.core.images.basePath'
+    'horizon.app.core.images.actions.publish-image.service',
+    'horizon.app.core.images.actions.link-to-appliance-catalog.service'
   ];
 
   function registerImageActions(
@@ -51,7 +53,12 @@
     launchInstanceService,
     updateMetadataService,
     imageResourceTypeCode,
+<<<<<<< HEAD
     basePath
+=======
+    publishImageService,
+    linkToApplianceCatalogService
+>>>>>>> bcc539809... Support sharing of images to Appliance catalog
   ) {
     var imageResourceType = registry.getResourceType(imageResourceTypeCode);
     imageResourceType.itemActions
@@ -89,6 +96,20 @@
         template: {
           text: gettext('Delete Image'),
           type: 'delete'
+        }
+      })
+      .append({
+        id: 'publishImageService',
+        service: publishImageService,
+        template: {
+          text: gettext('Publish to Appliance Catalog')
+        }
+      })
+      .append({
+        id: 'linkToApplianceCatalogService',
+        service: linkToApplianceCatalogService,
+        template: {
+          text: gettext('Details')
         }
       });
 
