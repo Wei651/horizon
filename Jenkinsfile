@@ -22,8 +22,7 @@ pipeline {
       build(
         job: 'service-containers/master', 
         parameters: [
-          string(name: 'BRANCH_NAME', value: "${env.BRANCH_NAME}"),
-          string(name: 'PROJECT_NAME', value: "${env.JOB_NAME}")
+          string(name: 'JOB_NAME', value: "${env.JOB_NAME}")
         ]
       )
     }
