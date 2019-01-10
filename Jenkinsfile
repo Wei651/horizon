@@ -2,7 +2,7 @@ pipeline {
   agent any
  
   options {
-    copyArtifactPermissionProperty(projectNames: ['horizon-container'])
+    copyArtifactPermission(projectNames: ['horizon-container'])
   }
 
   stages {
