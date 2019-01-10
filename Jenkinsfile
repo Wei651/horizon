@@ -11,8 +11,11 @@ pipeline {
         archiveArtifacts(artifacts: 'dist/*', onlyIfSuccessful: true)
       }
     }
-    stage('build-container') {
-      build job: 'horizon-container'
+  }
+
+  post {
+    success {
+      build 'horizon-container'
     }
   }
 }
