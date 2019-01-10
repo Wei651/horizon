@@ -1,6 +1,12 @@
 pipeline {
   agent any
  
+  properties {
+    copyArtifactPermissionProperty {
+      projectNames('horizon-container')
+    }
+  }
+
   stages {
     stage('package') {
       environment {
