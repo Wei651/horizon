@@ -19,7 +19,7 @@ pipeline {
 
   post {
     success {
-      build job: 'horizon-container', parameters: [string(name: 'BRANCH_NAME', value: '"${env.BRANCH_NAME}"')]
+      build job: 'horizon-container', parameters: [string(name: 'BRANCH_NAME', value: "${env.BRANCH_NAME}")]
     }
   }
 }
