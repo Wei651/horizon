@@ -25,6 +25,7 @@ pipeline {
     success {
       build(
         job: 'service-containers/master', 
+        wait: false,
         parameters: [
           string(name: 'JOB_NAME', value: "${env.JOB_NAME}")
         ]
