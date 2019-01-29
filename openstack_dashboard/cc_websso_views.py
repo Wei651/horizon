@@ -10,6 +10,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from openstack_auth import utils
 from openstack_auth import exceptions
 from openstack_auth import user as auth_user
+from openstack_auth import views as oauth_views
 import six
 import urlparse
 
@@ -36,7 +37,7 @@ def login(request, template_name=None, extra_context=None, **kwargs):
         if getattr(settings, 'WEBROOT', None) and getattr(settings, 'WEBROOT', None) != '/':
             login_url += '&webroot=' + getattr(settings, 'WEBROOT', '')
         return django_http.HttpResponseRedirect(login_url)
-    return openstack_auth.views.login(request, template_name=None, extra_context=None, **kwargs)
+    return oauth_views.login(request, template_name=None, extra_context=None, **kwargs)
 
 """
     this is a custom websso endpoint for chameleon portal
