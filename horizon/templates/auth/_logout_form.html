@@ -1,11 +1,6 @@
 {% load i18n %}
 
 {% block pre_login %}
-<form id="" class="ng-pristine ng-valid ng-scope"
-      method="POST"
-      action="{% url 'login' %}"
-      autocomplete="off"
-      ng-controller="hzLoginController">
   {% csrf_token %}
 {% endblock %}
 
@@ -31,14 +26,14 @@
     </div>
     <div class="panel-footer">
       {% block login_footer %}
-        <button id="loginBtn" type="submit" class="btn btn-primary pull-right">
+        <a href="{% url 'login' %}" id="loginBtn" class="btn btn-primary pull-right">
           <span >{% trans "Sign In" %}</span>
-        </button>
+        </a>
         <div class="clearfix"></div>
       {% endblock %}
     </div>
   </div>
 
 {% block post_login%}
-</form>
+
 {% endblock %}
