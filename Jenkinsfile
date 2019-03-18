@@ -1,15 +1,12 @@
 pipeline {
   agent any
- 
+
   options {
     copyArtifactPermission(projectNames: 'horizon*')
   }
 
   stages {
     stage('package') {
-      environment {
-        PBR_VERSION = "${env.BRANCH_NAME}"
-      }
       steps {
         dir('dist') {
           deleteDir()
