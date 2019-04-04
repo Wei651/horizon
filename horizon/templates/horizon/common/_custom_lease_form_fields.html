@@ -13,7 +13,7 @@
     <p style="display:none;">
             Leave date and time values blank to start a lease immediately (on-demand).
     </p>
-    <div class="alert alert-info">For leases shorter than 24 hours, use lease length of zero days.</div>
+    <div class="alert alert-info">For leases shorter than 24 hours, use a lease length of zero days.</div>
 <div class="left">
   {% include 'horizon/common/_form_field.html' with field=form.start_date %}
   {% include 'horizon/common/_form_field.html' with field=form.start_time %}
@@ -47,6 +47,7 @@
         </div>
         {% include 'horizon/common/_form_field.html' with field=form.end_time %}
 </div>
+{% include 'horizon/common/_form_field.html' with field=form.network_ip_count %}
 
 <div class="left" style="margin-top:10px; border-right:1px solid lightgray;height:auto">
         <h4>Physical Hosts</h4>
@@ -66,6 +67,5 @@
         {% include 'horizon/common/_form_field.html' with field=form.resource_type_network %}
         {% include 'horizon/common/_form_field.html' with field=form.network_name %}
         {% include 'horizon/common/_form_field.html' with field=form.network_description %}
-        {% include 'horizon/common/_form_field.html' with field=form.network_ip_count %}
 </div>
 </div>
