@@ -1,4 +1,3 @@
-{% include 'horizon/common/_form_errors.html' with form=form %}
 {% load form_helpers %}
 <div class="alert alert-warning">
         Please be courteous to other users of the testbed and make sure your lease represents a responsible 
@@ -6,7 +5,8 @@
         <a href="https://chameleoncloud.readthedocs.io/en/latest/getting-started/faq.html#what-are-the-best-practices-for-chameleon-usage" target="blank">
             best practices</a>. 
         Chameleon operators reserve the right to terminate leases judged to be abusive.
-        </div>
+</div>
+{% include 'horizon/common/_form_errors.html' with form=form %}
         <div class="row-fluid">
         {% include 'horizon/common/_form_field.html' with field=form.name %}
         
@@ -47,7 +47,8 @@
         </div>
         {% include 'horizon/common/_form_field.html' with field=form.end_time %}
 </div>
-{% include 'horizon/common/_form_field.html' with field=form.network_ip_count %}
+
+{% comment "Not ready for floating ip reservations on this form yet" %} include 'horizon/common/_form_field.html' with field=form.network_ip_count {% endcomment %}
 
 <div class="left" style="margin-top:10px; border-right:1px solid lightgray;height:auto">
         <h4>Physical Hosts</h4>
