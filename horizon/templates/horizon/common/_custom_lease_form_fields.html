@@ -48,7 +48,7 @@
         {% include 'horizon/common/_form_field.html' with field=form.end_time %}
 </div>
 
-{% include 'horizon/common/_form_field.html' with field=form.network_ip_count %}
+{% comment "Not ready for floating ip reservations on this form yet" %} include 'horizon/common/_form_field.html' with field=form.network_ip_count {% endcomment %}
 
 <div class="left" style="margin-top:10px; border-right:1px solid lightgray;height:auto">
         <h4>Physical Hosts</h4>
