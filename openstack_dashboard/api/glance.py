@@ -56,8 +56,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 LOG = logging.getLogger(__name__)
 VERSIONS = base.APIVersionManager("image", preferred_version=2)
 
-
-
 try:
     # pylint: disable=ungrouped-imports
     from glanceclient.v2 import client as glance_client_v2
@@ -177,20 +175,16 @@ class Image(base.APIResourceWrapper):
         return not self.__eq__(other_image)
 
     def get_catalog_id(self):
-        if cache.get('published_appliances', {}).get(self.id):
-            return cache.get('published_appliances', {}).get(self.id).get('id', -1)
-        return -1
+        return cache.get('published_appliances', {}).get(self.id, {}).get('id', -1)
 
     def get_is_project_supported(self):
-        if cache.get('published_appliances', {}).get(self.id):
-            return cache.get('published_appliances', {}).get(self.id).get('project_supported', False)
-        return False
+        return cache.get('published_appliances', {}).get(self.id, {}).get('project_supported', False)
 
     def get_is_published_in_app_catalog(self):
         return cache.get('published_appliances', {}).get(self.id) is not None
 
 def fetch_published_appliances():
-    if not cache.get('app_catalog_updated', False) or not cache.get('published_appliances', False):
+    if not cache.get('published_appliances', False):
         try:
             LOG.info('Fetching appliances from ' + settings.CHAMELEON_PORTAL_API_BASE_URL\
                 + settings.APPLIANCE_CATALOG_API_PATH)
@@ -205,7 +199,7 @@ def fetch_published_appliances():
                 if appliance.get('kvm_tacc_appliance_id', False):
                     appliance_dict[appliance.get('kvm_tacc_appliance_id')] = appliance
             cache.set('published_appliances', appliance_dict, 60*15)
-            cache.set('app_catalog_updated', True, 60*10)
+            LOG.info('Appliance Catalog cache updated')
         except Exception as e:
             LOG.error(e)
 
