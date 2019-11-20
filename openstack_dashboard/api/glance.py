@@ -93,7 +93,7 @@ class Image(base.APIResourceWrapper):
                   "kernel_id", "ramdisk_id", "image_url"}
 
     # These are Appliance published to the Chameleon portal
-    PUBLISHED_APPLIANCES = {}
+    _published_appliances = {}
 
     def __getattribute__(self, attr):
         # Because Glance v2 treats custom properties as normal
@@ -175,16 +175,17 @@ class Image(base.APIResourceWrapper):
         return not self.__eq__(other_image)
 
     def get_catalog_id(self):
-        return cache.get('published_appliances', {}).get(self.id, {}).get('id', -1)
+        return Image._published_appliances.get(self.id, {}).get('id', -1)
 
     def get_is_project_supported(self):
-        return cache.get('published_appliances', {}).get(self.id, {}).get('project_supported', False)
+        return Image._published_appliances.get(self.id, {}).get('project_supported', False)
 
     def get_is_published_in_app_catalog(self):
-        return cache.get('published_appliances', {}).get(self.id) is not None
+        return Image._published_appliances.get(self.id) is not None
 
 def fetch_published_appliances():
-    if not cache.get('published_appliances', False):
+    Image._published_appliances = cache.get('published_appliances', {})
+    if not Image._published_appliances:
         try:
             LOG.info('Fetching appliances from ' + settings.CHAMELEON_PORTAL_API_BASE_URL\
                 + settings.APPLIANCE_CATALOG_API_PATH)
@@ -199,6 +200,7 @@ def fetch_published_appliances():
                 if appliance.get('kvm_tacc_appliance_id', False):
                     appliance_dict[appliance.get('kvm_tacc_appliance_id')] = appliance
             cache.set('published_appliances', appliance_dict, 60*15)
+            Image._published_appliances = appliance_dict
             LOG.info('Appliance Catalog cache updated')
         except Exception as e:
             LOG.error(e)
