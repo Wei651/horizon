@@ -24,7 +24,7 @@ LOG = logging.getLogger(__name__)
 @csrf_protect
 @never_cache
 def login(request, template_name=None, extra_context=None, **kwargs):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         host = getattr(settings, 'SSO_CALLBACK_HOST', None)
         cc_portal_url = getattr(settings, 'CHAMELEON_PORTAL_SSO_BASE_URL', None) + getattr(settings, 'CHAMELEON_PORTAL_SSO_LOGIN_PATH', None)
         if(host is None or cc_portal_url is None):
