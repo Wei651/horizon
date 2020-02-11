@@ -102,64 +102,6 @@ class MKSConsole(base.APIDictWrapper):
     """
     _attrs = ['url', 'type']
 
-
-class Server(base.APIResourceWrapper):
-    """Simple wrapper around novaclient.server.Server.
-
-    Preserves the request info so image name can later be retrieved.
-    """
-    _attrs = ['addresses', 'attrs', 'id', 'image', 'links', 'description',
-              'metadata', 'name', 'private_ip', 'public_ip', 'status', 'uuid',
-              'image_name', 'VirtualInterfaces', 'flavor', 'key_name', 'fault',
-              'tenant_id', 'user_id', 'created', 'locked',
-              'OS-EXT-STS:power_state', 'OS-EXT-STS:task_state',
-              'OS-EXT-SRV-ATTR:instance_name', 'OS-EXT-SRV-ATTR:host',
-              'OS-EXT-AZ:availability_zone', 'OS-DCF:diskConfig',
-              'OS-EXT-SRV-ATTR:hypervisor_hostname']
-
-    def __init__(self, apiresource, request):
-        super(Server, self).__init__(apiresource)
-        self.request = request
-
-    # TODO(gabriel): deprecate making a call to Glance as a fallback.
-    @property
-    def image_name(self):
-        import glanceclient.exc as glance_exceptions
-        from openstack_dashboard.api import glance
-
-        if not self.image:
-            return None
-        elif hasattr(self.image, 'name'):
-            return self.image.name
-        elif 'name' in self.image:
-            return self.image['name']
-        else:
-            try:
-                image = glance.image_get(self.request, self.image['id'])
-                self.image['name'] = image.name
-                return image.name
-            except (glance_exceptions.ClientException,
-                    horizon_exceptions.ServiceCatalogException):
-                self.image['name'] = None
-                return None
-
-    @property
-    def internal_name(self):
-        return getattr(self, 'OS-EXT-SRV-ATTR:instance_name', "")
-
-    @property
-    def hypervisor_hostname(self):
-        return getattr(self, 'OS-EXT-SRV-ATTR:hypervisor_hostname', "")
-
-    @property
-    def availability_zone(self):
-        return getattr(self, 'OS-EXT-AZ:availability_zone', "")
-
-    @property
-    def host_server(self):
-        return getattr(self, 'OS-EXT-SRV-ATTR:host', '')
-
-
 class Hypervisor(base.APIDictWrapper):
     """Simple wrapper around novaclient.hypervisors.Hypervisor."""
 
