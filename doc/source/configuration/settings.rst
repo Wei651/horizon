@@ -1737,6 +1737,7 @@ Default:
         'enable_quotas': False,
         'enable_rbac_policy': True,
         'enable_router': True,
+        'enable_security_group': True,
         'extra_provider_types': {},
         'physical_networks': [],
         'segmentation_id_range': {},
@@ -1862,6 +1863,19 @@ and Floating IP features. This option only affects when Neutron is enabled. If
 your Neutron deployment has no support for Layer-3 features, or you do not wish
 to provide the Layer-3 features through the Dashboard, this should be set to
 ``False``.
+
+enable_security_group
+#####################
+
+.. versionadded:: 17.0.0(Victoria)
+
+Default: ``True``
+
+Enable (``True``) or disable (``False``) the panels and menus related to
+security group features. This option only has effect when Neutron is enabled and
+the security-group extension is supported. If your Neutron deployment has no
+support for port security, this should be set to ``False``.
+
 
 extra_provider_types
 ####################

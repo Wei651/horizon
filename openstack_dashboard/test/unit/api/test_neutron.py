@@ -1125,6 +1125,16 @@ class NeutronApiSecurityGroupTests(test.APIMockTestCase):
         self.sg_dict = dict([(sg['id'], sg['name']) for sg
                              in self.api_security_groups.list()])
 
+    @override_settings(OPENSTACK_NEUTRON_NETWORK={
+        'enable_security_group': True})
+    def test_security_group_supported(self):
+        self.assertTrue(api.neutron.security_group_supported(self.request))
+
+    @override_settings(OPENSTACK_NEUTRON_NETWORK={
+        'enable_security_group': False})
+    def test_security_group_supported_false(self):
+        self.assertFalse(api.neutron.security_group_supported(self.request))
+
     def _cmp_sg_rule(self, exprule, retrule):
         self.assertEqual(exprule['id'], retrule.id)
         self.assertEqual(exprule['security_group_id'],

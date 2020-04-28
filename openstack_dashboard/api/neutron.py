@@ -500,6 +500,10 @@ class SecurityGroupManager(object):
             params = {'security_groups': new_security_group_ids}
             port_update(self.request, p.id, **params)
 
+    def is_supported(self):
+        return (is_enabled_by_config('enable_security_group') and
+            is_extension_supported(request, 'security-group'))
+
 
 class FloatingIp(base.APIDictWrapper):
     _attrs = ['id', 'ip', 'fixed_ip', 'port_id', 'instance_id',
@@ -1693,6 +1697,9 @@ def server_update_security_groups(request, instance_id,
                                   new_security_group_ids):
     return SecurityGroupManager(request).update_instance_security_group(
         instance_id, new_security_group_ids)
+
+def security_group_supported(request):
+    return SecurityGroupManager(request).is_supported()
 
 
 # TODO(pkarikh) need to uncomment when osprofiler will have no

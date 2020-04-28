@@ -527,6 +527,8 @@ class DetailView(tabs.TabView):
             exceptions.handle(self.request, msg, ignore=True)
 
     def _get_security_groups(self, instance):
+        if not api.neutron.security_group_supported(self.request):
+            return []
         instance_id = instance.id
         try:
             instance.security_groups = api.neutron.server_security_groups(

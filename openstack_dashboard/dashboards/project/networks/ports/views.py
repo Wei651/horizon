@@ -111,6 +111,8 @@ class DetailView(tabs.TabbedTableView):
             # Avoid extra API calls if no security group is associated.
             if not sg_ids:
                 return []
+            if not api.neutron.security_group_supported(self.request):
+                return []
             try:
                 security_groups = api.neutron.security_group_list(self.request,
                                                                   id=sg_ids)

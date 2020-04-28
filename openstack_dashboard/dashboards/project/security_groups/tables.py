@@ -67,6 +67,9 @@ class CreateGroup(tables.LinkAction):
     icon = "plus"
 
     def allowed(self, request, security_group=None):
+        if not api.neutron.security_group_supported():
+            return False
+
         usages = quotas.tenant_quota_usages(request,
                                             targets=('security_group', ))
         if usages['security_group'].get('available', 1) <= 0:
@@ -88,6 +91,8 @@ class EditGroup(policy.PolicyTargetMixin, tables.LinkAction):
     icon = "pencil"
 
     def allowed(self, request, security_group=None):
+        if not api.neutron.security_group_supported():
+            return False
         if not security_group:
             return True
         return security_group.name != 'default'
@@ -136,6 +141,9 @@ class CreateRule(tables.LinkAction):
         return reverse(self.url, args=[self.table.kwargs['security_group_id']])
 
     def allowed(self, request, security_group=None):
+        if not api.neutron.security_group_supported():
+            return False
+
         usages = quotas.tenant_quota_usages(request,
                                             targets=('security_group_rule', ))
 

@@ -63,7 +63,7 @@ class UpdateInstanceSecurityGroups(sg_base.BaseSecurityGroups):
     depends_on = ("instance_id", "target_tenant_id")
 
     def allowed(self, request):
-        return api.base.is_service_enabled(request, 'network')
+        return api.neutron.security_group_supported(request)
 
 
 class UpdateInstanceInfoAction(workflows.Action):
