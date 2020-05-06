@@ -151,6 +151,10 @@ def is_websso_default_redirect():
     return websso_default_redirect and keystonev3_plus
 
 
+def wants_bypass_websso_default_redirect(request):
+    return request.GET.get("websso_version") == "2"
+
+
 def get_websso_default_redirect_protocol():
     return settings.WEBSSO_DEFAULT_REDIRECT_PROTOCOL
 
@@ -161,6 +165,10 @@ def get_websso_default_redirect_region():
 
 def get_websso_default_redirect_logout():
     return settings.WEBSSO_DEFAULT_REDIRECT_LOGOUT
+
+
+def get_websso_default_redirect_url():
+    return settings.WEBSSO_DEFAULT_REDIRECT_URL
 
 
 def build_absolute_uri(request, relative_url):
@@ -242,10 +250,17 @@ def get_websso_url(request, auth_url, websso_auth):
                '/protocols/%s/websso?origin=%s' %
                (auth_url, idp_id, protocol_id, origin))
     else:
-        # If no IDP mapping found for the identifier,
-        # perform WebSSO by protocol.
-        url = ('%s/auth/OS-FEDERATION/websso/%s?origin=%s' %
-               (auth_url, protocol_id, origin))
+        if (utils.is_websso_default_redirect() and
+            utils.get_websso_default_redirect_url()):
+            # If the IdP is not found (or was explicitly undefined), and
+            # there is a default URL set, prefer it over WebSSO by protocol.
+            url = ('%s?origin=%s' %
+                  (utils.get_websso_default_redirect_url(), origin))
+        else:
+            # If no IDP mapping found for the identifier,
+            # perform WebSSO by protocol.
+            url = ('%s/auth/OS-FEDERATION/websso/%s?origin=%s' %
+                (auth_url, protocol_id, origin))
 
     return url
 

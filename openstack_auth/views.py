@@ -58,12 +58,16 @@ def login(request):
     # If the user enabled websso and the default redirect
     # redirect to the default websso url
     if (request.method == 'GET' and utils.is_websso_enabled and
-            utils.is_websso_default_redirect()):
-        protocol = utils.get_websso_default_redirect_protocol()
-        region = utils.get_websso_default_redirect_region()
+            utils.is_websso_default_redirect() and
+            (not utils.wants_bypass_websso_default_redirect(request))):
         origin = utils.build_absolute_uri(request, '/auth/websso/')
-        url = ('%s/auth/OS-FEDERATION/websso/%s?origin=%s' %
-               (region, protocol, origin))
+        if utils.get_websso_default_url():
+            url = ('%s?origin=%s' % (utils.get_websso_default_url(), origin))
+        else:
+            protocol = utils.get_websso_default_redirect_protocol()
+            region = utils.get_websso_default_redirect_region()
+            base_url = ('%s/auth/OS-FEDERATION/websso/%s?origin=%s' %
+                       (region, protocol, origin))
         return shortcuts.redirect(url)
 
     # If the user enabled websso and selects default protocol
@@ -165,7 +169,10 @@ def login(request):
 def websso(request):
     """Logs a user in using a token from Keystone's POST."""
     referer = request.META.get('HTTP_REFERER', settings.OPENSTACK_KEYSTONE_URL)
-    auth_url = utils.clean_up_auth_url(referer)
+    if referer == utils.get_websso_default_redirect_url():
+        auth_url = settings.OPENSTACK_KEYSTONE_URL
+    else:
+        auth_url = utils.clean_up_auth_url(referer)
     token = request.POST.get('token')
     try:
         request.user = auth.authenticate(request, auth_url=auth_url,

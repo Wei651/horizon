@@ -151,6 +151,11 @@ WEBSSO_DEFAULT_REDIRECT_REGION = OPENSTACK_KEYSTONE_URL
 # in this variable.
 WEBSSO_DEFAULT_REDIRECT_LOGOUT = None
 
+# Specifies an absolute redirect URL to use instead of automaticall
+# constructing one based on the default protocol/region. Useful if you're doing
+# something weird like completely bypassing Keystone's built-in WebSSO support.
+WEBSSO_DEFAULT_REDIRECT_URL = None
+
 # If set this URL will be used for web single-sign-on authentication
 # instead of OPENSTACK_KEYSTONE_URL. This is needed in the deployment
 # scenarios where network segmentation is used per security requirement.
