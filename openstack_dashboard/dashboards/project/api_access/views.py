@@ -73,6 +73,17 @@ def _get_openrc_credentials(request):
     keystone_url = api.base.url_for(request,
                                     'identity',
                                     endpoint_type='publicURL')
+    if user.is_federated:
+        idp_id = user.federated_identity_provider
+        protocol = user.federated_protocol
+        identity_provider = api.keystone.identity_provider_get(request, idp_id)
+        identity_provider_url = identity_provider.remote_ids[0]
+        client_id_mapping = settings.WEBSSO_CLIENT_ID_MAPPING
+        identity_provider_client_id = client_id_mapping.get((idp_id, protocol))
+    else:
+        identity_provider_url = None
+        identity_provider_client_id = None
+
     return {
         'tenant_id': request.user.tenant_id,
         'tenant_name': request.user.tenant_name,
@@ -81,6 +92,8 @@ def _get_openrc_credentials(request):
         'interface': 'public',
         'os_endpoint_type': 'publicURL',
         'region': getattr(request.user, 'services_region') or "",
+        'identity_provider_url': identity_provider_url,
+        'identity_provider_client_id': identity_provider_client_id,
     }
 
 

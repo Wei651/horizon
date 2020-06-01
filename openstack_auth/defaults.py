@@ -136,6 +136,13 @@ WEBSSO_CHOICES = ()
 # }
 WEBSSO_IDP_MAPPING = {}
 
+# Example:
+# WEBSSO_CLIENT_ID_MAPPING = {
+#     ("acme", "oidc"): "acme-oidc-client-id",
+#     ("acme", "saml2"): "acme-saml-client-id"
+# }
+WEBSSO_CLIENT_ID_MAPPING = {}
+
 # Enables redirection on login to the identity provider defined on
 # WEBSSO_DEFAULT_REDIRECT_PROTOCOL and WEBSSO_DEFAULT_REDIRECT_REGION
 WEBSSO_DEFAULT_REDIRECT = False

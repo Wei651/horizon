@@ -201,6 +201,7 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
                  services_region=None, user_domain_id=None,
                  user_domain_name=None, domain_id=None, domain_name=None,
                  project_id=None, project_name=None, is_federated=False,
+                 identity_provider_id=None, protocol_id=None,
                  unscoped_token=None, password=None, password_expires_at=None):
         self.id = id
         self.pk = id
@@ -330,6 +331,22 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
                     if region not in regions:
                         regions.append(region)
         return regions
+
+    @property
+    def federated_identity_provider(self):
+        if self.is_federated:
+            return (self.token._user.get('OS-FEDERATION', {})
+                .get('identity_provider', {}).get('id'))
+        else:
+            return None
+
+    @property
+    def federated_protocol(self):
+        if self.is_federated:
+            return (self.token._user.get('OS-FEDERATION', {})
+                .get('protocol', {}).get('id'))
+        else:
+            return None
 
     def save(self, *args, **kwargs):
         # Presume we can't write to Keystone.

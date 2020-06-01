@@ -30,10 +30,22 @@ unset OS_TENANT_NAME
 # performing the action as the **user**.
 export OS_USERNAME="{{ user.username|shellfilter }}"
 
+{% if user.is_federated %}
+export OS_AUTH_TYPE="v3oidcpassword"
+export OS_IDENTITY_PROVIDER="{{ user.federated_identity_provider }}"
+export OS_PROTOCOL="{{ user.federated_protocol }}"
+export OS_CLIENT_ID="{{ identity_provider_client_id }}"
+export OS_CLIENT_SECRET="none"
+export OS_DISCOVERY_ENDPOINT="{{ identity_provider_url }}/.well-known/openid-configuration"
+echo "Please enter your CLI password for user $OS_USERNAME: "
+read -sr OS_PASSWORD_INPUT
+export OS_PASSWORD=$OS_PASSWORD_INPUT
+{% else %}
 # With Keystone you pass the keystone password.
 echo "Please enter your OpenStack Password for project $OS_PROJECT_NAME as user $OS_USERNAME: "
 read -sr OS_PASSWORD_INPUT
 export OS_PASSWORD=$OS_PASSWORD_INPUT
+{% endif %}
 
 # If your configuration has multiple regions, we set that information here.
 # OS_REGION_NAME is optional and only valid in certain environments.
