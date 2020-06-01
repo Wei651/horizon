@@ -67,6 +67,8 @@ def create_user_from_token(request, token, endpoint, services_region=None):
                 endpoint=endpoint,
                 services_region=svc_region,
                 is_federated=getattr(token, 'is_federated', False),
+                federated_idp=getattr(token, 'federated_idp', None),
+                federated_protocol=getattr(token, 'federated_protocol', None),
                 unscoped_token=getattr(token, 'unscoped_token',
                                        request.session.get('unscoped_token')))
 
@@ -116,6 +118,10 @@ class Token(object):
         self.is_federated = auth_ref.is_federated
         self.roles = [{'name': role} for role in auth_ref.role_names]
         self.serviceCatalog = auth_ref.service_catalog.catalog
+        self.federated_idp = (auth_ref._user.get('OS-FEDERATION', {})
+            .get('identity_provider', {}).get('id'))
+        self.federated_protocol = (auth_ref._user.get('OS-FEDERATION', {})
+            .get('protocol', {}).get('id'))
 
 
 class User(models.AbstractBaseUser, models.AnonymousUser):
@@ -201,6 +207,7 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
                  services_region=None, user_domain_id=None,
                  user_domain_name=None, domain_id=None, domain_name=None,
                  project_id=None, project_name=None, is_federated=False,
+                 federated_idp=None, federated_protocol=None,
                  unscoped_token=None, password=None, password_expires_at=None):
         self.id = id
         self.pk = id
@@ -223,6 +230,8 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
         self.enabled = enabled
         self._authorized_tenants = authorized_tenants
         self.is_federated = is_federated
+        self.federated_idp = federated_idp
+        self.federated_protocol = federated_protocol
         self.password_expires_at = password_expires_at
 
         # Unscoped token is used for listing user's project that works
