@@ -103,6 +103,7 @@ class KeystoneBackend(object):
             auth_url = settings.OPENSTACK_KEYSTONE_URL
 
         auth_url, url_fixed = utils.fix_auth_url_version_prefix(auth_url)
+        unprefixed_auth_url = utils.strip_auth_url_version_prefix(auth_url)
         if url_fixed:
             LOG.warning("The OPENSTACK_KEYSTONE_URL setting points to a v2.0 "
                         "Keystone endpoint, but v3 is specified as the API "
@@ -162,7 +163,8 @@ class KeystoneBackend(object):
         id_endpoints = scoped_auth_ref.service_catalog.\
             get_endpoints(service_type='identity')
         for id_endpoint in [cat for cat in id_endpoints['identity']]:
-            if auth_url in id_endpoint.values():
+            search_list = id_endpoint.values()
+            if auth_url in search_list or unprefixed_auth_url in search_list:
                 region_name = id_endpoint['region']
                 break
 
