@@ -23,7 +23,7 @@ import operator
 from oslo_utils import units
 import six
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms.widgets import HiddenInput
 from django.template.defaultfilters import filesizeformat
 from django.utils.safestring import mark_safe
