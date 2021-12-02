@@ -1,5 +1,5 @@
 =============================
-Horizon (OpenStack Dashboard)
+Horizon from Wei ARA (OpenStack Dashboard)
 =============================
 
 Horizon is a Django-based project aimed at providing a complete OpenStack
